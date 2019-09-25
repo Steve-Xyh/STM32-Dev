@@ -1,0 +1,902 @@
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.fputc,"ax",%progbits
+  20              		.align	2
+  21              		.global	fputc
+  22              		.thumb
+  23              		.thumb_func
+  25              	fputc:
+  26              	.LFB64:
+  27              		.file 1 "Src/main.c"
+   1:Src/main.c    **** /* USER CODE BEGIN Header */
+   2:Src/main.c    **** 
+   3:Src/main.c    **** /*********SLAVE********/
+   4:Src/main.c    **** 
+   5:Src/main.c    **** /**
+   6:Src/main.c    ****   ******************************************************************************
+   7:Src/main.c    ****   * @file           : main.c
+   8:Src/main.c    ****   * @brief          : Main program body
+   9:Src/main.c    ****   ******************************************************************************
+  10:Src/main.c    ****   * @attention
+  11:Src/main.c    ****   *
+  12:Src/main.c    ****   * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  13:Src/main.c    ****   * All rights reserved.</center></h2>
+  14:Src/main.c    ****   *
+  15:Src/main.c    ****   * This software component is licensed by ST under BSD 3-Clause license,
+  16:Src/main.c    ****   * the "License"; You may not use this file except in compliance with the
+  17:Src/main.c    ****   * License. You may obtain a copy of the License at:
+  18:Src/main.c    ****   *                        opensource.org/licenses/BSD-3-Clause
+  19:Src/main.c    ****   *
+  20:Src/main.c    ****   ******************************************************************************
+  21:Src/main.c    ****   */
+  22:Src/main.c    **** /* USER CODE END Header */
+  23:Src/main.c    **** 
+  24:Src/main.c    **** /* Includes ------------------------------------------------------------------*/
+  25:Src/main.c    **** #include "main.h"
+  26:Src/main.c    **** #include "usart.h"
+  27:Src/main.c    **** #include "gpio.h"
+  28:Src/main.c    **** 
+  29:Src/main.c    **** /* Private includes ----------------------------------------------------------*/
+  30:Src/main.c    **** /* USER CODE BEGIN Includes */
+  31:Src/main.c    **** 
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 2
+
+
+  32:Src/main.c    **** /* USER CODE END Includes */
+  33:Src/main.c    **** 
+  34:Src/main.c    **** /* Private typedef -----------------------------------------------------------*/
+  35:Src/main.c    **** /* USER CODE BEGIN PTD */
+  36:Src/main.c    **** 
+  37:Src/main.c    **** /* USER CODE END PTD */
+  38:Src/main.c    **** 
+  39:Src/main.c    **** /* Private define ------------------------------------------------------------*/
+  40:Src/main.c    **** /* USER CODE BEGIN PD */
+  41:Src/main.c    **** uint8_t rData[6];
+  42:Src/main.c    **** uint8_t tData[] = "#ffff:0001#\n\r";
+  43:Src/main.c    **** uint8_t cmd[6];
+  44:Src/main.c    **** uint8_t endline[] = "\n\r";
+  45:Src/main.c    **** uint8_t a = 0;
+  46:Src/main.c    **** uint8_t a_str[10];
+  47:Src/main.c    **** int loaded = 0;
+  48:Src/main.c    **** 
+  49:Src/main.c    **** #define ON 0x1
+  50:Src/main.c    **** #define OFF 0xf
+  51:Src/main.c    **** /* USER CODE END PD */
+  52:Src/main.c    **** 
+  53:Src/main.c    **** /* Private macro -------------------------------------------------------------*/
+  54:Src/main.c    **** /* USER CODE BEGIN PM */
+  55:Src/main.c    **** 
+  56:Src/main.c    **** /* USER CODE END PM */
+  57:Src/main.c    **** 
+  58:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  59:Src/main.c    **** 
+  60:Src/main.c    **** /* USER CODE BEGIN PV */
+  61:Src/main.c    **** 
+  62:Src/main.c    **** /* USER CODE END PV */
+  63:Src/main.c    **** 
+  64:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  65:Src/main.c    **** void SystemClock_Config(void);
+  66:Src/main.c    **** /* USER CODE BEGIN PFP */
+  67:Src/main.c    **** 
+  68:Src/main.c    **** /* USER CODE END PFP */
+  69:Src/main.c    **** 
+  70:Src/main.c    **** /* Private user code ---------------------------------------------------------*/
+  71:Src/main.c    **** /* USER CODE BEGIN 0 */
+  72:Src/main.c    **** int fputc(int ch,FILE *f)
+  73:Src/main.c    **** {
+  28              		.loc 1 73 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 00B5     		push	{lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 14, -4
+  37 0002 83B0     		sub	sp, sp, #12
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
+  40 0004 02A9     		add	r1, sp, #8
+  41              	.LVL1:
+  42 0006 41F8040D 		str	r0, [r1, #-4]!
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 3
+
+
+  74:Src/main.c    ****   //while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+  75:Src/main.c    ****   HAL_UART_Transmit(&huart1,(uint8_t *)&ch,1,0xFFFF);
+  43              		.loc 1 75 0
+  44 000a 4FF6FF73 		movw	r3, #65535
+  45 000e 0122     		movs	r2, #1
+  46 0010 0348     		ldr	r0, .L3
+  47              	.LVL2:
+  48 0012 FFF7FEFF 		bl	HAL_UART_Transmit
+  49              	.LVL3:
+  76:Src/main.c    ****   return ch;
+  77:Src/main.c    **** }
+  50              		.loc 1 77 0
+  51 0016 0198     		ldr	r0, [sp, #4]
+  52 0018 03B0     		add	sp, sp, #12
+  53              	.LCFI2:
+  54              		.cfi_def_cfa_offset 4
+  55              		@ sp needed
+  56 001a 5DF804FB 		ldr	pc, [sp], #4
+  57              	.LVL4:
+  58              	.L4:
+  59 001e 00BF     		.align	2
+  60              	.L3:
+  61 0020 00000000 		.word	huart1
+  62              		.cfi_endproc
+  63              	.LFE64:
+  65              		.section	.text.fgetc,"ax",%progbits
+  66              		.align	2
+  67              		.global	fgetc
+  68              		.thumb
+  69              		.thumb_func
+  71              	fgetc:
+  72              	.LFB65:
+  78:Src/main.c    **** 
+  79:Src/main.c    **** int fgetc(FILE *f)
+  80:Src/main.c    **** {
+  73              		.loc 1 80 0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 8
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77              	.LVL5:
+  78 0000 00B5     		push	{lr}
+  79              	.LCFI3:
+  80              		.cfi_def_cfa_offset 4
+  81              		.cfi_offset 14, -4
+  82 0002 83B0     		sub	sp, sp, #12
+  83              	.LCFI4:
+  84              		.cfi_def_cfa_offset 16
+  81:Src/main.c    ****   uint8_t ch = 0;
+  85              		.loc 1 81 0
+  86 0004 02A9     		add	r1, sp, #8
+  87 0006 0023     		movs	r3, #0
+  88 0008 01F8013D 		strb	r3, [r1, #-1]!
+  82:Src/main.c    ****   HAL_UART_Receive(&huart1, &ch, 1, 0xffff);
+  89              		.loc 1 82 0
+  90 000c 4FF6FF73 		movw	r3, #65535
+  91 0010 0122     		movs	r2, #1
+  92 0012 0448     		ldr	r0, .L7
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 4
+
+
+  93              	.LVL6:
+  94 0014 FFF7FEFF 		bl	HAL_UART_Receive
+  95              	.LVL7:
+  83:Src/main.c    ****   return ch;
+  84:Src/main.c    **** }
+  96              		.loc 1 84 0
+  97 0018 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+  98 001c 03B0     		add	sp, sp, #12
+  99              	.LCFI5:
+ 100              		.cfi_def_cfa_offset 4
+ 101              		@ sp needed
+ 102 001e 5DF804FB 		ldr	pc, [sp], #4
+ 103              	.L8:
+ 104 0022 00BF     		.align	2
+ 105              	.L7:
+ 106 0024 00000000 		.word	huart1
+ 107              		.cfi_endproc
+ 108              	.LFE65:
+ 110              		.section	.text.SwitchOn,"ax",%progbits
+ 111              		.align	2
+ 112              		.global	SwitchOn
+ 113              		.thumb
+ 114              		.thumb_func
+ 116              	SwitchOn:
+ 117              	.LFB66:
+  85:Src/main.c    **** 
+  86:Src/main.c    **** void SwitchOn(GPIO_TypeDef* LedPort, uint16_t LedPin)
+  87:Src/main.c    **** {
+ 118              		.loc 1 87 0
+ 119              		.cfi_startproc
+ 120              		@ args = 0, pretend = 0, frame = 0
+ 121              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122              	.LVL8:
+ 123 0000 08B5     		push	{r3, lr}
+ 124              	.LCFI6:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 3, -8
+ 127              		.cfi_offset 14, -4
+  88:Src/main.c    ****   HAL_GPIO_WritePin(LedPort,LedPin,1);
+ 128              		.loc 1 88 0
+ 129 0002 0122     		movs	r2, #1
+ 130 0004 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 131              	.LVL9:
+ 132 0008 08BD     		pop	{r3, pc}
+ 133              		.cfi_endproc
+ 134              	.LFE66:
+ 136 000a 00BF     		.section	.text.SwitchOff,"ax",%progbits
+ 137              		.align	2
+ 138              		.global	SwitchOff
+ 139              		.thumb
+ 140              		.thumb_func
+ 142              	SwitchOff:
+ 143              	.LFB67:
+  89:Src/main.c    **** }
+  90:Src/main.c    **** 
+  91:Src/main.c    **** void SwitchOff(GPIO_TypeDef* LedPort, uint16_t LedPin)
+  92:Src/main.c    **** {
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 5
+
+
+ 144              		.loc 1 92 0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              	.LVL10:
+ 149 0000 08B5     		push	{r3, lr}
+ 150              	.LCFI7:
+ 151              		.cfi_def_cfa_offset 8
+ 152              		.cfi_offset 3, -8
+ 153              		.cfi_offset 14, -4
+  93:Src/main.c    ****   HAL_GPIO_WritePin(LedPort,LedPin,0);
+ 154              		.loc 1 93 0
+ 155 0002 0022     		movs	r2, #0
+ 156 0004 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 157              	.LVL11:
+ 158 0008 08BD     		pop	{r3, pc}
+ 159              		.cfi_endproc
+ 160              	.LFE67:
+ 162 000a 00BF     		.section	.text.PowerOn,"ax",%progbits
+ 163              		.align	2
+ 164              		.global	PowerOn
+ 165              		.thumb
+ 166              		.thumb_func
+ 168              	PowerOn:
+ 169              	.LFB68:
+  94:Src/main.c    **** }
+  95:Src/main.c    **** 
+  96:Src/main.c    **** void PowerOn()
+  97:Src/main.c    **** {
+ 170              		.loc 1 97 0
+ 171              		.cfi_startproc
+ 172              		@ args = 0, pretend = 0, frame = 0
+ 173              		@ frame_needed = 0, uses_anonymous_args = 0
+ 174 0000 08B5     		push	{r3, lr}
+ 175              	.LCFI8:
+ 176              		.cfi_def_cfa_offset 8
+ 177              		.cfi_offset 3, -8
+ 178              		.cfi_offset 14, -4
+  98:Src/main.c    ****   SwitchOn(ControlSig_GPIO_Port, ControlSig_Pin);
+ 179              		.loc 1 98 0
+ 180 0002 4FF40061 		mov	r1, #2048
+ 181 0006 0248     		ldr	r0, .L15
+ 182 0008 FFF7FEFF 		bl	SwitchOn
+ 183              	.LVL12:
+ 184 000c 08BD     		pop	{r3, pc}
+ 185              	.L16:
+ 186 000e 00BF     		.align	2
+ 187              	.L15:
+ 188 0010 000C0140 		.word	1073810432
+ 189              		.cfi_endproc
+ 190              	.LFE68:
+ 192              		.section	.text.PowerOff,"ax",%progbits
+ 193              		.align	2
+ 194              		.global	PowerOff
+ 195              		.thumb
+ 196              		.thumb_func
+ 198              	PowerOff:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 6
+
+
+ 199              	.LFB69:
+  99:Src/main.c    **** }
+ 100:Src/main.c    **** 
+ 101:Src/main.c    **** void PowerOff()
+ 102:Src/main.c    **** {
+ 200              		.loc 1 102 0
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 0
+ 203              		@ frame_needed = 0, uses_anonymous_args = 0
+ 204 0000 08B5     		push	{r3, lr}
+ 205              	.LCFI9:
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 3, -8
+ 208              		.cfi_offset 14, -4
+ 103:Src/main.c    ****   SwitchOff(ControlSig_GPIO_Port, ControlSig_Pin);
+ 209              		.loc 1 103 0
+ 210 0002 4FF40061 		mov	r1, #2048
+ 211 0006 0248     		ldr	r0, .L19
+ 212 0008 FFF7FEFF 		bl	SwitchOff
+ 213              	.LVL13:
+ 214 000c 08BD     		pop	{r3, pc}
+ 215              	.L20:
+ 216 000e 00BF     		.align	2
+ 217              	.L19:
+ 218 0010 000C0140 		.word	1073810432
+ 219              		.cfi_endproc
+ 220              	.LFE69:
+ 222              		.section	.text.Toggle,"ax",%progbits
+ 223              		.align	2
+ 224              		.global	Toggle
+ 225              		.thumb
+ 226              		.thumb_func
+ 228              	Toggle:
+ 229              	.LFB70:
+ 104:Src/main.c    **** }
+ 105:Src/main.c    **** 
+ 106:Src/main.c    **** void Toggle()
+ 107:Src/main.c    **** {
+ 230              		.loc 1 107 0
+ 231              		.cfi_startproc
+ 232              		@ Volatile: function does not return.
+ 233              		@ args = 0, pretend = 0, frame = 0
+ 234              		@ frame_needed = 0, uses_anonymous_args = 0
+ 235 0000 08B5     		push	{r3, lr}
+ 236              	.LCFI10:
+ 237              		.cfi_def_cfa_offset 8
+ 238              		.cfi_offset 3, -8
+ 239              		.cfi_offset 14, -4
+ 240              	.L22:
+ 108:Src/main.c    ****   while(1){
+ 109:Src/main.c    ****     SwitchOn(ToggleSig_GPIO_Port, ToggleSig_Pin);
+ 241              		.loc 1 109 0 discriminator 1
+ 242 0002 0A4C     		ldr	r4, .L24
+ 243 0004 4FF48061 		mov	r1, #1024
+ 244 0008 2046     		mov	r0, r4
+ 245 000a FFF7FEFF 		bl	SwitchOn
+ 246              	.LVL14:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 7
+
+
+ 110:Src/main.c    ****     HAL_Delay(1000);
+ 247              		.loc 1 110 0 discriminator 1
+ 248 000e 4FF47A70 		mov	r0, #1000
+ 249 0012 FFF7FEFF 		bl	HAL_Delay
+ 250              	.LVL15:
+ 111:Src/main.c    ****     SwitchOff(ToggleSig_GPIO_Port, ToggleSig_Pin);
+ 251              		.loc 1 111 0 discriminator 1
+ 252 0016 4FF48061 		mov	r1, #1024
+ 253 001a 2046     		mov	r0, r4
+ 254 001c FFF7FEFF 		bl	SwitchOff
+ 255              	.LVL16:
+ 112:Src/main.c    ****     HAL_Delay(1000);
+ 256              		.loc 1 112 0 discriminator 1
+ 257 0020 4FF47A70 		mov	r0, #1000
+ 258 0024 FFF7FEFF 		bl	HAL_Delay
+ 259              	.LVL17:
+ 260 0028 EBE7     		b	.L22
+ 261              	.L25:
+ 262 002a 00BF     		.align	2
+ 263              	.L24:
+ 264 002c 000C0140 		.word	1073810432
+ 265              		.cfi_endproc
+ 266              	.LFE70:
+ 268              		.section	.text.endLine,"ax",%progbits
+ 269              		.align	2
+ 270              		.global	endLine
+ 271              		.thumb
+ 272              		.thumb_func
+ 274              	endLine:
+ 275              	.LFB71:
+ 113:Src/main.c    ****   }
+ 114:Src/main.c    **** }
+ 115:Src/main.c    **** 
+ 116:Src/main.c    **** void endLine()
+ 117:Src/main.c    **** {
+ 276              		.loc 1 117 0
+ 277              		.cfi_startproc
+ 278              		@ args = 0, pretend = 0, frame = 0
+ 279              		@ frame_needed = 0, uses_anonymous_args = 0
+ 280 0000 08B5     		push	{r3, lr}
+ 281              	.LCFI11:
+ 282              		.cfi_def_cfa_offset 8
+ 283              		.cfi_offset 3, -8
+ 284              		.cfi_offset 14, -4
+ 118:Src/main.c    ****   HAL_UART_Transmit(&huart1, endline, sizeof(endline), 1000);
+ 285              		.loc 1 118 0
+ 286 0002 4FF47A73 		mov	r3, #1000
+ 287 0006 0322     		movs	r2, #3
+ 288 0008 0449     		ldr	r1, .L29
+ 289 000a 0548     		ldr	r0, .L29+4
+ 290 000c FFF7FEFF 		bl	HAL_UART_Transmit
+ 291              	.LVL18:
+ 292              	.L27:
+ 119:Src/main.c    ****   while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 293              		.loc 1 119 0 discriminator 1
+ 294 0010 0348     		ldr	r0, .L29+4
+ 295 0012 FFF7FEFF 		bl	HAL_UART_GetState
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 8
+
+
+ 296              	.LVL19:
+ 297 0016 2128     		cmp	r0, #33
+ 298 0018 FAD0     		beq	.L27
+ 120:Src/main.c    **** }
+ 299              		.loc 1 120 0
+ 300 001a 08BD     		pop	{r3, pc}
+ 301              	.L30:
+ 302              		.align	2
+ 303              	.L29:
+ 304 001c 00000000 		.word	.LANCHOR0
+ 305 0020 00000000 		.word	huart1
+ 306              		.cfi_endproc
+ 307              	.LFE71:
+ 309              		.section	.text.SystemClock_Config,"ax",%progbits
+ 310              		.align	2
+ 311              		.global	SystemClock_Config
+ 312              		.thumb
+ 313              		.thumb_func
+ 315              	SystemClock_Config:
+ 316              	.LFB73:
+ 121:Src/main.c    **** 
+ 122:Src/main.c    **** 
+ 123:Src/main.c    **** /* USER CODE END 0 */
+ 124:Src/main.c    **** 
+ 125:Src/main.c    **** /**
+ 126:Src/main.c    ****   * @brief  The application entry point.
+ 127:Src/main.c    ****   * @retval int
+ 128:Src/main.c    ****   */
+ 129:Src/main.c    **** int main(void)
+ 130:Src/main.c    **** {
+ 131:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 132:Src/main.c    **** 
+ 133:Src/main.c    ****   /* USER CODE END 1 */
+ 134:Src/main.c    **** 
+ 135:Src/main.c    ****   /* MCU Configuration--------------------------------------------------------*/
+ 136:Src/main.c    **** 
+ 137:Src/main.c    ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 138:Src/main.c    ****   HAL_Init();
+ 139:Src/main.c    **** 
+ 140:Src/main.c    ****   /* USER CODE BEGIN Init */
+ 141:Src/main.c    **** 
+ 142:Src/main.c    ****   /* USER CODE END Init */
+ 143:Src/main.c    **** 
+ 144:Src/main.c    ****   /* Configure the system clock */
+ 145:Src/main.c    ****   SystemClock_Config();
+ 146:Src/main.c    **** 
+ 147:Src/main.c    ****   /* USER CODE BEGIN SysInit */
+ 148:Src/main.c    **** 
+ 149:Src/main.c    ****   /* USER CODE END SysInit */
+ 150:Src/main.c    **** 
+ 151:Src/main.c    ****   /* Initialize all configured peripherals */
+ 152:Src/main.c    ****   MX_GPIO_Init();
+ 153:Src/main.c    ****   MX_USART1_UART_Init();
+ 154:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 155:Src/main.c    **** 
+ 156:Src/main.c    ****   /* USER CODE END 2 */
+ 157:Src/main.c    **** 
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 9
+
+
+ 158:Src/main.c    ****   /* Infinite loop */
+ 159:Src/main.c    ****   /* USER CODE BEGIN WHILE */
+ 160:Src/main.c    ****   while (1)
+ 161:Src/main.c    ****   {
+ 162:Src/main.c    ****     /* USER CODE END WHILE */
+ 163:Src/main.c    **** 
+ 164:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 165:Src/main.c    **** 
+ 166:Src/main.c    ****     //Toggle();
+ 167:Src/main.c    ****     
+ 168:Src/main.c    ****     while(!loaded){
+ 169:Src/main.c    ****       //发送地址
+ 170:Src/main.c    ****       HAL_UART_Transmit(&huart1, tData, sizeof(tData), 1000);
+ 171:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 172:Src/main.c    **** 
+ 173:Src/main.c    ****       //检测总控是否识别
+ 174:Src/main.c    ****       HAL_UART_Receive(&huart1, rData, sizeof(rData), 1000);
+ 175:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 176:Src/main.c    ****       if(rData[1] == 'R'){
+ 177:Src/main.c    ****         loaded = 1;
+ 178:Src/main.c    ****         break;
+ 179:Src/main.c    ****       }
+ 180:Src/main.c    ****     }
+ 181:Src/main.c    **** 
+ 182:Src/main.c    ****     //接收指令
+ 183:Src/main.c    ****     HAL_UART_Receive(&huart1, rData, sizeof(rData), 1000);
+ 184:Src/main.c    ****     while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 185:Src/main.c    **** 
+ 186:Src/main.c    ****     if(rData[1] == 'X')PowerOff();
+ 187:Src/main.c    ****     else if(rData[1] == 'O')PowerOn();
+ 188:Src/main.c    ****     //Toggle();
+ 189:Src/main.c    **** 
+ 190:Src/main.c    ****   }
+ 191:Src/main.c    ****   /* USER CODE END 3 */
+ 192:Src/main.c    **** }
+ 193:Src/main.c    **** 
+ 194:Src/main.c    **** /**
+ 195:Src/main.c    ****   * @brief System Clock Configuration
+ 196:Src/main.c    ****   * @retval None
+ 197:Src/main.c    ****   */
+ 198:Src/main.c    **** void SystemClock_Config(void)
+ 199:Src/main.c    **** {
+ 317              		.loc 1 199 0
+ 318              		.cfi_startproc
+ 319              		@ args = 0, pretend = 0, frame = 64
+ 320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 321 0000 10B5     		push	{r4, lr}
+ 322              	.LCFI12:
+ 323              		.cfi_def_cfa_offset 8
+ 324              		.cfi_offset 4, -8
+ 325              		.cfi_offset 14, -4
+ 326 0002 90B0     		sub	sp, sp, #64
+ 327              	.LCFI13:
+ 328              		.cfi_def_cfa_offset 72
+ 200:Src/main.c    ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 329              		.loc 1 200 0
+ 330 0004 2822     		movs	r2, #40
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 10
+
+
+ 331 0006 0021     		movs	r1, #0
+ 332 0008 06A8     		add	r0, sp, #24
+ 333 000a FFF7FEFF 		bl	memset
+ 334              	.LVL20:
+ 201:Src/main.c    ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ 335              		.loc 1 201 0
+ 336 000e 0024     		movs	r4, #0
+ 337 0010 0194     		str	r4, [sp, #4]
+ 338 0012 0294     		str	r4, [sp, #8]
+ 339 0014 0394     		str	r4, [sp, #12]
+ 340 0016 0494     		str	r4, [sp, #16]
+ 341 0018 0594     		str	r4, [sp, #20]
+ 202:Src/main.c    **** 
+ 203:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 204:Src/main.c    ****   */
+ 205:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+ 342              		.loc 1 205 0
+ 343 001a 0223     		movs	r3, #2
+ 344 001c 0693     		str	r3, [sp, #24]
+ 206:Src/main.c    ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 345              		.loc 1 206 0
+ 346 001e 0123     		movs	r3, #1
+ 347 0020 0A93     		str	r3, [sp, #40]
+ 207:Src/main.c    ****   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+ 348              		.loc 1 207 0
+ 349 0022 1023     		movs	r3, #16
+ 350 0024 0B93     		str	r3, [sp, #44]
+ 208:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+ 209:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 351              		.loc 1 209 0
+ 352 0026 06A8     		add	r0, sp, #24
+ 353 0028 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 354              	.LVL21:
+ 210:Src/main.c    ****   {
+ 211:Src/main.c    ****     Error_Handler();
+ 212:Src/main.c    ****   }
+ 213:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 214:Src/main.c    ****   */
+ 215:Src/main.c    ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 355              		.loc 1 215 0
+ 356 002c 0F23     		movs	r3, #15
+ 357 002e 0193     		str	r3, [sp, #4]
+ 216:Src/main.c    ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 217:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+ 358              		.loc 1 217 0
+ 359 0030 0294     		str	r4, [sp, #8]
+ 218:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 360              		.loc 1 218 0
+ 361 0032 0394     		str	r4, [sp, #12]
+ 219:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 362              		.loc 1 219 0
+ 363 0034 0494     		str	r4, [sp, #16]
+ 220:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 364              		.loc 1 220 0
+ 365 0036 0594     		str	r4, [sp, #20]
+ 221:Src/main.c    **** 
+ 222:Src/main.c    ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 11
+
+
+ 366              		.loc 1 222 0
+ 367 0038 2146     		mov	r1, r4
+ 368 003a 01A8     		add	r0, sp, #4
+ 369 003c FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 370              	.LVL22:
+ 223:Src/main.c    ****   {
+ 224:Src/main.c    ****     Error_Handler();
+ 225:Src/main.c    ****   }
+ 226:Src/main.c    **** }
+ 371              		.loc 1 226 0
+ 372 0040 10B0     		add	sp, sp, #64
+ 373              	.LCFI14:
+ 374              		.cfi_def_cfa_offset 8
+ 375              		@ sp needed
+ 376 0042 10BD     		pop	{r4, pc}
+ 377              		.cfi_endproc
+ 378              	.LFE73:
+ 380              		.section	.text.main,"ax",%progbits
+ 381              		.align	2
+ 382              		.global	main
+ 383              		.thumb
+ 384              		.thumb_func
+ 386              	main:
+ 387              	.LFB72:
+ 130:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 388              		.loc 1 130 0
+ 389              		.cfi_startproc
+ 390              		@ Volatile: function does not return.
+ 391              		@ args = 0, pretend = 0, frame = 0
+ 392              		@ frame_needed = 0, uses_anonymous_args = 0
+ 393 0000 08B5     		push	{r3, lr}
+ 394              	.LCFI15:
+ 395              		.cfi_def_cfa_offset 8
+ 396              		.cfi_offset 3, -8
+ 397              		.cfi_offset 14, -4
+ 138:Src/main.c    **** 
+ 398              		.loc 1 138 0
+ 399 0002 FFF7FEFF 		bl	HAL_Init
+ 400              	.LVL23:
+ 145:Src/main.c    **** 
+ 401              		.loc 1 145 0
+ 402 0006 FFF7FEFF 		bl	SystemClock_Config
+ 403              	.LVL24:
+ 152:Src/main.c    ****   MX_USART1_UART_Init();
+ 404              		.loc 1 152 0
+ 405 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 406              	.LVL25:
+ 153:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 407              		.loc 1 153 0
+ 408 000e FFF7FEFF 		bl	MX_USART1_UART_Init
+ 409              	.LVL26:
+ 410 0012 1FE0     		b	.L34
+ 411              	.L39:
+ 170:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 412              		.loc 1 170 0
+ 413 0014 4FF47A73 		mov	r3, #1000
+ 414 0018 0E22     		movs	r2, #14
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 12
+
+
+ 415 001a 1C49     		ldr	r1, .L43
+ 416 001c 1C48     		ldr	r0, .L43+4
+ 417 001e FFF7FEFF 		bl	HAL_UART_Transmit
+ 418              	.LVL27:
+ 419              	.L35:
+ 171:Src/main.c    **** 
+ 420              		.loc 1 171 0 discriminator 1
+ 421 0022 1B48     		ldr	r0, .L43+4
+ 422 0024 FFF7FEFF 		bl	HAL_UART_GetState
+ 423              	.LVL28:
+ 424 0028 2128     		cmp	r0, #33
+ 425 002a FAD0     		beq	.L35
+ 174:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 426              		.loc 1 174 0
+ 427 002c 4FF47A73 		mov	r3, #1000
+ 428 0030 0622     		movs	r2, #6
+ 429 0032 1849     		ldr	r1, .L43+8
+ 430 0034 1648     		ldr	r0, .L43+4
+ 431 0036 FFF7FEFF 		bl	HAL_UART_Receive
+ 432              	.LVL29:
+ 433              	.L36:
+ 175:Src/main.c    ****       if(rData[1] == 'R'){
+ 434              		.loc 1 175 0 discriminator 1
+ 435 003a 1548     		ldr	r0, .L43+4
+ 436 003c FFF7FEFF 		bl	HAL_UART_GetState
+ 437              	.LVL30:
+ 438 0040 2228     		cmp	r0, #34
+ 439 0042 FAD0     		beq	.L36
+ 176:Src/main.c    ****         loaded = 1;
+ 440              		.loc 1 176 0
+ 441 0044 134B     		ldr	r3, .L43+8
+ 442 0046 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 443 0048 522B     		cmp	r3, #82
+ 444 004a 03D1     		bne	.L34
+ 177:Src/main.c    ****         break;
+ 445              		.loc 1 177 0
+ 446 004c 0122     		movs	r2, #1
+ 447 004e 124B     		ldr	r3, .L43+12
+ 448 0050 1A60     		str	r2, [r3]
+ 178:Src/main.c    ****       }
+ 449              		.loc 1 178 0
+ 450 0052 03E0     		b	.L38
+ 451              	.L34:
+ 168:Src/main.c    ****       //发送地址
+ 452              		.loc 1 168 0
+ 453 0054 104B     		ldr	r3, .L43+12
+ 454 0056 1B68     		ldr	r3, [r3]
+ 455 0058 002B     		cmp	r3, #0
+ 456 005a DBD0     		beq	.L39
+ 457              	.L38:
+ 183:Src/main.c    ****     while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 458              		.loc 1 183 0
+ 459 005c 4FF47A73 		mov	r3, #1000
+ 460 0060 0622     		movs	r2, #6
+ 461 0062 0C49     		ldr	r1, .L43+8
+ 462 0064 0A48     		ldr	r0, .L43+4
+ 463 0066 FFF7FEFF 		bl	HAL_UART_Receive
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 13
+
+
+ 464              	.LVL31:
+ 465              	.L40:
+ 184:Src/main.c    **** 
+ 466              		.loc 1 184 0 discriminator 1
+ 467 006a 0948     		ldr	r0, .L43+4
+ 468 006c FFF7FEFF 		bl	HAL_UART_GetState
+ 469              	.LVL32:
+ 470 0070 2228     		cmp	r0, #34
+ 471 0072 FAD0     		beq	.L40
+ 186:Src/main.c    ****     else if(rData[1] == 'O')PowerOn();
+ 472              		.loc 1 186 0
+ 473 0074 074B     		ldr	r3, .L43+8
+ 474 0076 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 475 0078 582B     		cmp	r3, #88
+ 476 007a 02D1     		bne	.L41
+ 186:Src/main.c    ****     else if(rData[1] == 'O')PowerOn();
+ 477              		.loc 1 186 0 is_stmt 0 discriminator 1
+ 478 007c FFF7FEFF 		bl	PowerOff
+ 479              	.LVL33:
+ 480 0080 E8E7     		b	.L34
+ 481              	.L41:
+ 187:Src/main.c    ****     //Toggle();
+ 482              		.loc 1 187 0 is_stmt 1
+ 483 0082 4F2B     		cmp	r3, #79
+ 484 0084 E6D1     		bne	.L34
+ 187:Src/main.c    ****     //Toggle();
+ 485              		.loc 1 187 0 is_stmt 0 discriminator 1
+ 486 0086 FFF7FEFF 		bl	PowerOn
+ 487              	.LVL34:
+ 488 008a E3E7     		b	.L34
+ 489              	.L44:
+ 490              		.align	2
+ 491              	.L43:
+ 492 008c 00000000 		.word	.LANCHOR1
+ 493 0090 00000000 		.word	huart1
+ 494 0094 00000000 		.word	rData
+ 495 0098 00000000 		.word	.LANCHOR2
+ 496              		.cfi_endproc
+ 497              	.LFE72:
+ 499              		.section	.text.Error_Handler,"ax",%progbits
+ 500              		.align	2
+ 501              		.global	Error_Handler
+ 502              		.thumb
+ 503              		.thumb_func
+ 505              	Error_Handler:
+ 506              	.LFB74:
+ 227:Src/main.c    **** 
+ 228:Src/main.c    **** /* USER CODE BEGIN 4 */
+ 229:Src/main.c    **** 
+ 230:Src/main.c    **** /* USER CODE END 4 */
+ 231:Src/main.c    **** 
+ 232:Src/main.c    **** /**
+ 233:Src/main.c    ****   * @brief  This function is executed in case of error occurrence.
+ 234:Src/main.c    ****   * @retval None
+ 235:Src/main.c    ****   */
+ 236:Src/main.c    **** void Error_Handler(void)
+ 237:Src/main.c    **** {
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 14
+
+
+ 507              		.loc 1 237 0 is_stmt 1
+ 508              		.cfi_startproc
+ 509              		@ args = 0, pretend = 0, frame = 0
+ 510              		@ frame_needed = 0, uses_anonymous_args = 0
+ 511              		@ link register save eliminated.
+ 512 0000 7047     		bx	lr
+ 513              		.cfi_endproc
+ 514              	.LFE74:
+ 516              		.global	loaded
+ 517              		.comm	a_str,10,4
+ 518              		.global	a
+ 519              		.global	endline
+ 520              		.comm	cmd,6,4
+ 521              		.global	tData
+ 522              		.comm	rData,6,4
+ 523 0002 00BF     		.section	.data.endline,"aw",%progbits
+ 524              		.align	2
+ 525              		.set	.LANCHOR0,. + 0
+ 528              	endline:
+ 529 0000 0A0D00   		.ascii	"\012\015\000"
+ 530              		.section	.data.tData,"aw",%progbits
+ 531              		.align	2
+ 532              		.set	.LANCHOR1,. + 0
+ 535              	tData:
+ 536 0000 23666666 		.ascii	"#ffff:0001#\012\015\000"
+ 536      663A3030 
+ 536      3031230A 
+ 536      0D00
+ 537              		.section	.bss.a,"aw",%nobits
+ 540              	a:
+ 541 0000 00       		.space	1
+ 542              		.section	.bss.loaded,"aw",%nobits
+ 543              		.align	2
+ 544              		.set	.LANCHOR2,. + 0
+ 547              	loaded:
+ 548 0000 00000000 		.space	4
+ 549              		.text
+ 550              	.Letext0:
+ 551              		.file 2 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 552              		.file 3 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 553              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 554              		.file 5 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/sys/lock.h"
+ 555              		.file 6 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/sys/_types.h"
+ 556              		.file 7 "/Users/apple/gcc-arm-none-eabi/lib/gcc/arm-none-eabi/5.4.1/include/stddef.h"
+ 557              		.file 8 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/sys/reent.h"
+ 558              		.file 9 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/stdio.h"
+ 559              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 560              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h"
+ 561              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h"
+ 562              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 563              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 564              		.file 15 "Drivers/CMSIS/Include/core_cm3.h"
+ 565              		.file 16 "Inc/usart.h"
+ 566              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 567              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 568              		.file 19 "Inc/gpio.h"
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:20     .text.fputc:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:25     .text.fputc:0000000000000000 fputc
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:61     .text.fputc:0000000000000020 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:66     .text.fgetc:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:71     .text.fgetc:0000000000000000 fgetc
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:106    .text.fgetc:0000000000000024 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:111    .text.SwitchOn:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:116    .text.SwitchOn:0000000000000000 SwitchOn
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:137    .text.SwitchOff:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:142    .text.SwitchOff:0000000000000000 SwitchOff
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:163    .text.PowerOn:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:168    .text.PowerOn:0000000000000000 PowerOn
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:188    .text.PowerOn:0000000000000010 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:193    .text.PowerOff:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:198    .text.PowerOff:0000000000000000 PowerOff
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:218    .text.PowerOff:0000000000000010 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:223    .text.Toggle:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:228    .text.Toggle:0000000000000000 Toggle
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:264    .text.Toggle:000000000000002c $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:269    .text.endLine:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:274    .text.endLine:0000000000000000 endLine
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:304    .text.endLine:000000000000001c $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:310    .text.SystemClock_Config:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:315    .text.SystemClock_Config:0000000000000000 SystemClock_Config
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:381    .text.main:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:386    .text.main:0000000000000000 main
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:492    .text.main:000000000000008c $d
+                            *COM*:0000000000000006 rData
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:500    .text.Error_Handler:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:505    .text.Error_Handler:0000000000000000 Error_Handler
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:547    .bss.loaded:0000000000000000 loaded
+                            *COM*:000000000000000a a_str
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:540    .bss.a:0000000000000000 a
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:528    .data.endline:0000000000000000 endline
+                            *COM*:0000000000000006 cmd
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:535    .data.tData:0000000000000000 tData
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:524    .data.endline:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:531    .data.tData:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:541    .bss.a:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s:543    .bss.loaded:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_UART_Transmit
+huart1
+HAL_UART_Receive
+HAL_GPIO_WritePin
+HAL_Delay
+HAL_UART_GetState
+memset
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_Init
+MX_GPIO_Init
+MX_USART1_UART_Init
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccygRsSH.s 			page 16
+
+

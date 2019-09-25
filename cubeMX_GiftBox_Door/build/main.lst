@@ -1,0 +1,786 @@
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.SwitchOn,"ax",%progbits
+  20              		.align	2
+  21              		.global	SwitchOn
+  22              		.thumb
+  23              		.thumb_func
+  25              	SwitchOn:
+  26              	.LFB64:
+  27              		.file 1 "Src/main.c"
+   1:Src/main.c    **** /* USER CODE BEGIN Header */
+   2:Src/main.c    **** /**
+   3:Src/main.c    ****   ******************************************************************************
+   4:Src/main.c    ****   * @file           : main.c
+   5:Src/main.c    ****   * @brief          : Main program body
+   6:Src/main.c    ****   ******************************************************************************
+   7:Src/main.c    ****   * @attention
+   8:Src/main.c    ****   *
+   9:Src/main.c    ****   * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  10:Src/main.c    ****   * All rights reserved.</center></h2>
+  11:Src/main.c    ****   *
+  12:Src/main.c    ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:Src/main.c    ****   * the "License"; You may not use this file except in compliance with the
+  14:Src/main.c    ****   * License. You may obtain a copy of the License at:
+  15:Src/main.c    ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:Src/main.c    ****   *
+  17:Src/main.c    ****   ******************************************************************************
+  18:Src/main.c    ****   */
+  19:Src/main.c    **** /* USER CODE END Header */
+  20:Src/main.c    **** 
+  21:Src/main.c    **** /* Includes ------------------------------------------------------------------*/
+  22:Src/main.c    **** #include "main.h"
+  23:Src/main.c    **** #include "usart.h"
+  24:Src/main.c    **** #include "gpio.h"
+  25:Src/main.c    **** 
+  26:Src/main.c    **** /* Private includes ----------------------------------------------------------*/
+  27:Src/main.c    **** /* USER CODE BEGIN Includes */
+  28:Src/main.c    **** 
+  29:Src/main.c    **** /* USER CODE END Includes */
+  30:Src/main.c    **** 
+  31:Src/main.c    **** /* Private typedef -----------------------------------------------------------*/
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 2
+
+
+  32:Src/main.c    **** /* USER CODE BEGIN PTD */
+  33:Src/main.c    **** 
+  34:Src/main.c    **** /* USER CODE END PTD */
+  35:Src/main.c    **** 
+  36:Src/main.c    **** /* Private define ------------------------------------------------------------*/
+  37:Src/main.c    **** /* USER CODE BEGIN PD */
+  38:Src/main.c    **** uint8_t rData[6];
+  39:Src/main.c    **** uint8_t tData[] = "#0001:0003#\n\r";
+  40:Src/main.c    **** uint8_t cmdOn[] = "OOOOOO\n\r";
+  41:Src/main.c    **** uint8_t cmdOff[] = "XXXXXX\n\r";
+  42:Src/main.c    **** uint8_t endline[] = "\n\r";
+  43:Src/main.c    **** uint8_t a = 0;
+  44:Src/main.c    **** uint8_t a_str[10];
+  45:Src/main.c    **** int loaded = 0;
+  46:Src/main.c    **** 
+  47:Src/main.c    **** /* USER CODE END PD */
+  48:Src/main.c    **** 
+  49:Src/main.c    **** /* Private macro -------------------------------------------------------------*/
+  50:Src/main.c    **** /* USER CODE BEGIN PM */
+  51:Src/main.c    **** 
+  52:Src/main.c    **** /* USER CODE END PM */
+  53:Src/main.c    **** 
+  54:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  55:Src/main.c    **** 
+  56:Src/main.c    **** /* USER CODE BEGIN PV */
+  57:Src/main.c    **** 
+  58:Src/main.c    **** /* USER CODE END PV */
+  59:Src/main.c    **** 
+  60:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  61:Src/main.c    **** void SystemClock_Config(void);
+  62:Src/main.c    **** /* USER CODE BEGIN PFP */
+  63:Src/main.c    **** 
+  64:Src/main.c    **** /* USER CODE END PFP */
+  65:Src/main.c    **** 
+  66:Src/main.c    **** /* Private user code ---------------------------------------------------------*/
+  67:Src/main.c    **** /* USER CODE BEGIN 0 */
+  68:Src/main.c    **** 
+  69:Src/main.c    **** void SwitchOn(GPIO_TypeDef* LedPort, uint16_t LedPin)
+  70:Src/main.c    **** {
+  28              		.loc 1 70 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  71:Src/main.c    ****   HAL_GPIO_WritePin(LedPort,LedPin,0);
+  38              		.loc 1 71 0
+  39 0002 0022     		movs	r2, #0
+  40 0004 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  41              	.LVL1:
+  42 0008 08BD     		pop	{r3, pc}
+  43              		.cfi_endproc
+  44              	.LFE64:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 3
+
+
+  46 000a 00BF     		.section	.text.SwitchOff,"ax",%progbits
+  47              		.align	2
+  48              		.global	SwitchOff
+  49              		.thumb
+  50              		.thumb_func
+  52              	SwitchOff:
+  53              	.LFB65:
+  72:Src/main.c    **** }
+  73:Src/main.c    **** 
+  74:Src/main.c    **** void SwitchOff(GPIO_TypeDef* LedPort, uint16_t LedPin)
+  75:Src/main.c    **** {
+  54              		.loc 1 75 0
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 0, uses_anonymous_args = 0
+  58              	.LVL2:
+  59 0000 08B5     		push	{r3, lr}
+  60              	.LCFI1:
+  61              		.cfi_def_cfa_offset 8
+  62              		.cfi_offset 3, -8
+  63              		.cfi_offset 14, -4
+  76:Src/main.c    ****   HAL_GPIO_WritePin(LedPort,LedPin,1);
+  64              		.loc 1 76 0
+  65 0002 0122     		movs	r2, #1
+  66 0004 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  67              	.LVL3:
+  68 0008 08BD     		pop	{r3, pc}
+  69              		.cfi_endproc
+  70              	.LFE65:
+  72 000a 00BF     		.section	.text.PowerOn,"ax",%progbits
+  73              		.align	2
+  74              		.global	PowerOn
+  75              		.thumb
+  76              		.thumb_func
+  78              	PowerOn:
+  79              	.LFB66:
+  77:Src/main.c    **** }
+  78:Src/main.c    **** 
+  79:Src/main.c    **** void PowerOn()
+  80:Src/main.c    **** {
+  80              		.loc 1 80 0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84 0000 08B5     		push	{r3, lr}
+  85              	.LCFI2:
+  86              		.cfi_def_cfa_offset 8
+  87              		.cfi_offset 3, -8
+  88              		.cfi_offset 14, -4
+  81:Src/main.c    ****   SwitchOn(LED1_GPIO_Port, LED1_Pin);
+  89              		.loc 1 81 0
+  90 0002 0121     		movs	r1, #1
+  91 0004 0148     		ldr	r0, .L7
+  92 0006 FFF7FEFF 		bl	SwitchOn
+  93              	.LVL4:
+  94 000a 08BD     		pop	{r3, pc}
+  95              	.L8:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 4
+
+
+  96              		.align	2
+  97              	.L7:
+  98 000c 000C0140 		.word	1073810432
+  99              		.cfi_endproc
+ 100              	.LFE66:
+ 102              		.section	.text.PowerOff,"ax",%progbits
+ 103              		.align	2
+ 104              		.global	PowerOff
+ 105              		.thumb
+ 106              		.thumb_func
+ 108              	PowerOff:
+ 109              	.LFB67:
+  82:Src/main.c    **** }
+  83:Src/main.c    **** 
+  84:Src/main.c    **** void PowerOff()
+  85:Src/main.c    **** {
+ 110              		.loc 1 85 0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 0
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114 0000 08B5     		push	{r3, lr}
+ 115              	.LCFI3:
+ 116              		.cfi_def_cfa_offset 8
+ 117              		.cfi_offset 3, -8
+ 118              		.cfi_offset 14, -4
+  86:Src/main.c    ****   SwitchOff(LED1_GPIO_Port, LED1_Pin);
+ 119              		.loc 1 86 0
+ 120 0002 0121     		movs	r1, #1
+ 121 0004 0148     		ldr	r0, .L11
+ 122 0006 FFF7FEFF 		bl	SwitchOff
+ 123              	.LVL5:
+ 124 000a 08BD     		pop	{r3, pc}
+ 125              	.L12:
+ 126              		.align	2
+ 127              	.L11:
+ 128 000c 000C0140 		.word	1073810432
+ 129              		.cfi_endproc
+ 130              	.LFE67:
+ 132              		.section	.text.sendData,"ax",%progbits
+ 133              		.align	2
+ 134              		.global	sendData
+ 135              		.thumb
+ 136              		.thumb_func
+ 138              	sendData:
+ 139              	.LFB68:
+  87:Src/main.c    **** }
+  88:Src/main.c    **** 
+  89:Src/main.c    **** void sendData(uint8_t* message)
+  90:Src/main.c    **** {
+ 140              		.loc 1 90 0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              	.LVL6:
+ 145 0000 08B5     		push	{r3, lr}
+ 146              	.LCFI4:
+ 147              		.cfi_def_cfa_offset 8
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 5
+
+
+ 148              		.cfi_offset 3, -8
+ 149              		.cfi_offset 14, -4
+  91:Src/main.c    ****   HAL_UART_Transmit(&huart1, message, sizeof(message), 1000);
+ 150              		.loc 1 91 0
+ 151 0002 4FF47A73 		mov	r3, #1000
+ 152 0006 0422     		movs	r2, #4
+ 153 0008 0146     		mov	r1, r0
+ 154 000a 0448     		ldr	r0, .L16
+ 155              	.LVL7:
+ 156 000c FFF7FEFF 		bl	HAL_UART_Transmit
+ 157              	.LVL8:
+ 158              	.L14:
+  92:Src/main.c    ****   while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 159              		.loc 1 92 0 discriminator 1
+ 160 0010 0248     		ldr	r0, .L16
+ 161 0012 FFF7FEFF 		bl	HAL_UART_GetState
+ 162              	.LVL9:
+ 163 0016 2128     		cmp	r0, #33
+ 164 0018 FAD0     		beq	.L14
+  93:Src/main.c    **** }
+ 165              		.loc 1 93 0
+ 166 001a 08BD     		pop	{r3, pc}
+ 167              	.L17:
+ 168              		.align	2
+ 169              	.L16:
+ 170 001c 00000000 		.word	huart1
+ 171              		.cfi_endproc
+ 172              	.LFE68:
+ 174              		.section	.text.DetectorCMD,"ax",%progbits
+ 175              		.align	2
+ 176              		.global	DetectorCMD
+ 177              		.thumb
+ 178              		.thumb_func
+ 180              	DetectorCMD:
+ 181              	.LFB69:
+  94:Src/main.c    **** 
+  95:Src/main.c    **** int DetectorCMD(GPIO_TypeDef* KeyPort, uint16_t KeyPin)
+  96:Src/main.c    **** {
+ 182              		.loc 1 96 0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 0, uses_anonymous_args = 0
+ 186              	.LVL10:
+ 187 0000 08B5     		push	{r3, lr}
+ 188              	.LCFI5:
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 3, -8
+ 191              		.cfi_offset 14, -4
+  97:Src/main.c    ****   if(HAL_GPIO_ReadPin(KeyPort,KeyPin)){
+ 192              		.loc 1 97 0
+ 193 0002 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 194              	.LVL11:
+ 195 0006 08B1     		cbz	r0, .L20
+  98:Src/main.c    ****     return 1;
+ 196              		.loc 1 98 0
+ 197 0008 0120     		movs	r0, #1
+ 198 000a 08BD     		pop	{r3, pc}
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 6
+
+
+ 199              	.L20:
+  99:Src/main.c    ****   }
+ 100:Src/main.c    ****   else return 0;
+ 200              		.loc 1 100 0
+ 201 000c 0020     		movs	r0, #0
+ 101:Src/main.c    **** }
+ 202              		.loc 1 101 0
+ 203 000e 08BD     		pop	{r3, pc}
+ 204              		.cfi_endproc
+ 205              	.LFE69:
+ 207              		.section	.text.SystemClock_Config,"ax",%progbits
+ 208              		.align	2
+ 209              		.global	SystemClock_Config
+ 210              		.thumb
+ 211              		.thumb_func
+ 213              	SystemClock_Config:
+ 214              	.LFB71:
+ 102:Src/main.c    **** 
+ 103:Src/main.c    **** /* USER CODE END 0 */
+ 104:Src/main.c    **** 
+ 105:Src/main.c    **** /**
+ 106:Src/main.c    ****   * @brief  The application entry point.
+ 107:Src/main.c    ****   * @retval int
+ 108:Src/main.c    ****   */
+ 109:Src/main.c    **** int main(void)
+ 110:Src/main.c    **** {
+ 111:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 112:Src/main.c    **** 
+ 113:Src/main.c    ****   /* USER CODE END 1 */
+ 114:Src/main.c    **** 
+ 115:Src/main.c    ****   /* MCU Configuration--------------------------------------------------------*/
+ 116:Src/main.c    **** 
+ 117:Src/main.c    ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 118:Src/main.c    ****   HAL_Init();
+ 119:Src/main.c    **** 
+ 120:Src/main.c    ****   /* USER CODE BEGIN Init */
+ 121:Src/main.c    **** 
+ 122:Src/main.c    ****   /* USER CODE END Init */
+ 123:Src/main.c    **** 
+ 124:Src/main.c    ****   /* Configure the system clock */
+ 125:Src/main.c    ****   SystemClock_Config();
+ 126:Src/main.c    **** 
+ 127:Src/main.c    ****   /* USER CODE BEGIN SysInit */
+ 128:Src/main.c    **** 
+ 129:Src/main.c    ****   /* USER CODE END SysInit */
+ 130:Src/main.c    **** 
+ 131:Src/main.c    ****   /* Initialize all configured peripherals */
+ 132:Src/main.c    ****   MX_GPIO_Init();
+ 133:Src/main.c    ****   MX_USART1_UART_Init();
+ 134:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 135:Src/main.c    **** 
+ 136:Src/main.c    ****   /* USER CODE END 2 */
+ 137:Src/main.c    **** 
+ 138:Src/main.c    ****   /* Infinite loop */
+ 139:Src/main.c    ****   /* USER CODE BEGIN WHILE */
+ 140:Src/main.c    ****   while (1)
+ 141:Src/main.c    ****   {
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 7
+
+
+ 142:Src/main.c    ****     /* USER CODE END WHILE */
+ 143:Src/main.c    **** 
+ 144:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 145:Src/main.c    ****     while(!loaded){
+ 146:Src/main.c    ****       //发送地址
+ 147:Src/main.c    ****       HAL_UART_Transmit(&huart1, tData, sizeof(tData), 1000);
+ 148:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 149:Src/main.c    **** 
+ 150:Src/main.c    ****       //检测总控是否识别
+ 151:Src/main.c    ****       HAL_UART_Receive(&huart1, rData, sizeof(rData), 1000);
+ 152:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 153:Src/main.c    ****       if(rData[1] == 'R'){
+ 154:Src/main.c    ****         loaded = 1;
+ 155:Src/main.c    ****         PowerOff();
+ 156:Src/main.c    ****         break;
+ 157:Src/main.c    ****       }
+ 158:Src/main.c    ****     }
+ 159:Src/main.c    **** 
+ 160:Src/main.c    ****     //接收指令
+ 161:Src/main.c    ****     HAL_UART_Receive(&huart1, rData, sizeof(rData), 1000);
+ 162:Src/main.c    ****     while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 163:Src/main.c    **** 
+ 164:Src/main.c    ****     if(rData[1] == 'O'){
+ 165:Src/main.c    ****       PowerOn();
+ 166:Src/main.c    ****       HAL_Delay(8000);
+ 167:Src/main.c    ****       while(1)PowerOff();
+ 168:Src/main.c    ****       return 0;
+ 169:Src/main.c    ****     }
+ 170:Src/main.c    ****   }
+ 171:Src/main.c    ****   /* USER CODE END 3 */
+ 172:Src/main.c    **** }
+ 173:Src/main.c    **** 
+ 174:Src/main.c    **** /**
+ 175:Src/main.c    ****   * @brief System Clock Configuration
+ 176:Src/main.c    ****   * @retval None
+ 177:Src/main.c    ****   */
+ 178:Src/main.c    **** void SystemClock_Config(void)
+ 179:Src/main.c    **** {
+ 215              		.loc 1 179 0
+ 216              		.cfi_startproc
+ 217              		@ args = 0, pretend = 0, frame = 64
+ 218              		@ frame_needed = 0, uses_anonymous_args = 0
+ 219 0000 10B5     		push	{r4, lr}
+ 220              	.LCFI6:
+ 221              		.cfi_def_cfa_offset 8
+ 222              		.cfi_offset 4, -8
+ 223              		.cfi_offset 14, -4
+ 224 0002 90B0     		sub	sp, sp, #64
+ 225              	.LCFI7:
+ 226              		.cfi_def_cfa_offset 72
+ 180:Src/main.c    ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 227              		.loc 1 180 0
+ 228 0004 2822     		movs	r2, #40
+ 229 0006 0021     		movs	r1, #0
+ 230 0008 06A8     		add	r0, sp, #24
+ 231 000a FFF7FEFF 		bl	memset
+ 232              	.LVL12:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 8
+
+
+ 181:Src/main.c    ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ 233              		.loc 1 181 0
+ 234 000e 0024     		movs	r4, #0
+ 235 0010 0194     		str	r4, [sp, #4]
+ 236 0012 0294     		str	r4, [sp, #8]
+ 237 0014 0394     		str	r4, [sp, #12]
+ 238 0016 0494     		str	r4, [sp, #16]
+ 239 0018 0594     		str	r4, [sp, #20]
+ 182:Src/main.c    **** 
+ 183:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 184:Src/main.c    ****   */
+ 185:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+ 240              		.loc 1 185 0
+ 241 001a 0223     		movs	r3, #2
+ 242 001c 0693     		str	r3, [sp, #24]
+ 186:Src/main.c    ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 243              		.loc 1 186 0
+ 244 001e 0123     		movs	r3, #1
+ 245 0020 0A93     		str	r3, [sp, #40]
+ 187:Src/main.c    ****   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+ 246              		.loc 1 187 0
+ 247 0022 1023     		movs	r3, #16
+ 248 0024 0B93     		str	r3, [sp, #44]
+ 188:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+ 189:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 249              		.loc 1 189 0
+ 250 0026 06A8     		add	r0, sp, #24
+ 251 0028 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 252              	.LVL13:
+ 190:Src/main.c    ****   {
+ 191:Src/main.c    ****     Error_Handler();
+ 192:Src/main.c    ****   }
+ 193:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 194:Src/main.c    ****   */
+ 195:Src/main.c    ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 253              		.loc 1 195 0
+ 254 002c 0F23     		movs	r3, #15
+ 255 002e 0193     		str	r3, [sp, #4]
+ 196:Src/main.c    ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 197:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+ 256              		.loc 1 197 0
+ 257 0030 0294     		str	r4, [sp, #8]
+ 198:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 258              		.loc 1 198 0
+ 259 0032 0394     		str	r4, [sp, #12]
+ 199:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 260              		.loc 1 199 0
+ 261 0034 0494     		str	r4, [sp, #16]
+ 200:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 262              		.loc 1 200 0
+ 263 0036 0594     		str	r4, [sp, #20]
+ 201:Src/main.c    **** 
+ 202:Src/main.c    ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+ 264              		.loc 1 202 0
+ 265 0038 2146     		mov	r1, r4
+ 266 003a 01A8     		add	r0, sp, #4
+ 267 003c FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 9
+
+
+ 268              	.LVL14:
+ 203:Src/main.c    ****   {
+ 204:Src/main.c    ****     Error_Handler();
+ 205:Src/main.c    ****   }
+ 206:Src/main.c    **** }
+ 269              		.loc 1 206 0
+ 270 0040 10B0     		add	sp, sp, #64
+ 271              	.LCFI8:
+ 272              		.cfi_def_cfa_offset 8
+ 273              		@ sp needed
+ 274 0042 10BD     		pop	{r4, pc}
+ 275              		.cfi_endproc
+ 276              	.LFE71:
+ 278              		.section	.text.main,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	main
+ 281              		.thumb
+ 282              		.thumb_func
+ 284              	main:
+ 285              	.LFB70:
+ 110:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 286              		.loc 1 110 0
+ 287              		.cfi_startproc
+ 288              		@ Volatile: function does not return.
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291 0000 08B5     		push	{r3, lr}
+ 292              	.LCFI9:
+ 293              		.cfi_def_cfa_offset 8
+ 294              		.cfi_offset 3, -8
+ 295              		.cfi_offset 14, -4
+ 118:Src/main.c    **** 
+ 296              		.loc 1 118 0
+ 297 0002 FFF7FEFF 		bl	HAL_Init
+ 298              	.LVL15:
+ 125:Src/main.c    **** 
+ 299              		.loc 1 125 0
+ 300 0006 FFF7FEFF 		bl	SystemClock_Config
+ 301              	.LVL16:
+ 132:Src/main.c    ****   MX_USART1_UART_Init();
+ 302              		.loc 1 132 0
+ 303 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 304              	.LVL17:
+ 133:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 305              		.loc 1 133 0
+ 306 000e FFF7FEFF 		bl	MX_USART1_UART_Init
+ 307              	.LVL18:
+ 308 0012 21E0     		b	.L25
+ 309              	.L30:
+ 147:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX);
+ 310              		.loc 1 147 0
+ 311 0014 4FF47A73 		mov	r3, #1000
+ 312 0018 0E22     		movs	r2, #14
+ 313 001a 1E49     		ldr	r1, .L34
+ 314 001c 1E48     		ldr	r0, .L34+4
+ 315 001e FFF7FEFF 		bl	HAL_UART_Transmit
+ 316              	.LVL19:
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 10
+
+
+ 317              	.L26:
+ 148:Src/main.c    **** 
+ 318              		.loc 1 148 0 discriminator 1
+ 319 0022 1D48     		ldr	r0, .L34+4
+ 320 0024 FFF7FEFF 		bl	HAL_UART_GetState
+ 321              	.LVL20:
+ 322 0028 2128     		cmp	r0, #33
+ 323 002a FAD0     		beq	.L26
+ 151:Src/main.c    ****       while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 324              		.loc 1 151 0
+ 325 002c 4FF47A73 		mov	r3, #1000
+ 326 0030 0622     		movs	r2, #6
+ 327 0032 1A49     		ldr	r1, .L34+8
+ 328 0034 1848     		ldr	r0, .L34+4
+ 329 0036 FFF7FEFF 		bl	HAL_UART_Receive
+ 330              	.LVL21:
+ 331              	.L27:
+ 152:Src/main.c    ****       if(rData[1] == 'R'){
+ 332              		.loc 1 152 0 discriminator 1
+ 333 003a 1748     		ldr	r0, .L34+4
+ 334 003c FFF7FEFF 		bl	HAL_UART_GetState
+ 335              	.LVL22:
+ 336 0040 2228     		cmp	r0, #34
+ 337 0042 FAD0     		beq	.L27
+ 153:Src/main.c    ****         loaded = 1;
+ 338              		.loc 1 153 0
+ 339 0044 154B     		ldr	r3, .L34+8
+ 340 0046 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 341 0048 522B     		cmp	r3, #82
+ 342 004a 05D1     		bne	.L25
+ 154:Src/main.c    ****         PowerOff();
+ 343              		.loc 1 154 0
+ 344 004c 0122     		movs	r2, #1
+ 345 004e 144B     		ldr	r3, .L34+12
+ 346 0050 1A60     		str	r2, [r3]
+ 155:Src/main.c    ****         break;
+ 347              		.loc 1 155 0
+ 348 0052 FFF7FEFF 		bl	PowerOff
+ 349              	.LVL23:
+ 156:Src/main.c    ****       }
+ 350              		.loc 1 156 0
+ 351 0056 03E0     		b	.L29
+ 352              	.L25:
+ 145:Src/main.c    ****       //发送地址
+ 353              		.loc 1 145 0
+ 354 0058 114B     		ldr	r3, .L34+12
+ 355 005a 1B68     		ldr	r3, [r3]
+ 356 005c 002B     		cmp	r3, #0
+ 357 005e D9D0     		beq	.L30
+ 358              	.L29:
+ 161:Src/main.c    ****     while(HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_RX);
+ 359              		.loc 1 161 0
+ 360 0060 4FF47A73 		mov	r3, #1000
+ 361 0064 0622     		movs	r2, #6
+ 362 0066 0D49     		ldr	r1, .L34+8
+ 363 0068 0B48     		ldr	r0, .L34+4
+ 364 006a FFF7FEFF 		bl	HAL_UART_Receive
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 11
+
+
+ 365              	.LVL24:
+ 366              	.L31:
+ 162:Src/main.c    **** 
+ 367              		.loc 1 162 0 discriminator 1
+ 368 006e 0A48     		ldr	r0, .L34+4
+ 369 0070 FFF7FEFF 		bl	HAL_UART_GetState
+ 370              	.LVL25:
+ 371 0074 2228     		cmp	r0, #34
+ 372 0076 FAD0     		beq	.L31
+ 164:Src/main.c    ****       PowerOn();
+ 373              		.loc 1 164 0
+ 374 0078 084B     		ldr	r3, .L34+8
+ 375 007a 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 376 007c 4F2B     		cmp	r3, #79
+ 377 007e EBD1     		bne	.L25
+ 165:Src/main.c    ****       HAL_Delay(8000);
+ 378              		.loc 1 165 0
+ 379 0080 FFF7FEFF 		bl	PowerOn
+ 380              	.LVL26:
+ 166:Src/main.c    ****       while(1)PowerOff();
+ 381              		.loc 1 166 0
+ 382 0084 4FF4FA50 		mov	r0, #8000
+ 383 0088 FFF7FEFF 		bl	HAL_Delay
+ 384              	.LVL27:
+ 385              	.L32:
+ 167:Src/main.c    ****       return 0;
+ 386              		.loc 1 167 0 discriminator 1
+ 387 008c FFF7FEFF 		bl	PowerOff
+ 388              	.LVL28:
+ 389 0090 FCE7     		b	.L32
+ 390              	.L35:
+ 391 0092 00BF     		.align	2
+ 392              	.L34:
+ 393 0094 00000000 		.word	.LANCHOR0
+ 394 0098 00000000 		.word	huart1
+ 395 009c 00000000 		.word	rData
+ 396 00a0 00000000 		.word	.LANCHOR1
+ 397              		.cfi_endproc
+ 398              	.LFE70:
+ 400              		.section	.text.Error_Handler,"ax",%progbits
+ 401              		.align	2
+ 402              		.global	Error_Handler
+ 403              		.thumb
+ 404              		.thumb_func
+ 406              	Error_Handler:
+ 407              	.LFB72:
+ 207:Src/main.c    **** 
+ 208:Src/main.c    **** /* USER CODE BEGIN 4 */
+ 209:Src/main.c    **** 
+ 210:Src/main.c    **** /* USER CODE END 4 */
+ 211:Src/main.c    **** 
+ 212:Src/main.c    **** /**
+ 213:Src/main.c    ****   * @brief  This function is executed in case of error occurrence.
+ 214:Src/main.c    ****   * @retval None
+ 215:Src/main.c    ****   */
+ 216:Src/main.c    **** void Error_Handler(void)
+ 217:Src/main.c    **** {
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 12
+
+
+ 408              		.loc 1 217 0
+ 409              		.cfi_startproc
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 412              		@ link register save eliminated.
+ 413 0000 7047     		bx	lr
+ 414              		.cfi_endproc
+ 415              	.LFE72:
+ 417              		.global	loaded
+ 418              		.comm	a_str,10,4
+ 419              		.global	a
+ 420              		.global	endline
+ 421              		.global	cmdOff
+ 422              		.global	cmdOn
+ 423              		.global	tData
+ 424              		.comm	rData,6,4
+ 425 0002 00BF     		.section	.data.cmdOn,"aw",%progbits
+ 426              		.align	2
+ 429              	cmdOn:
+ 430 0000 4F4F4F4F 		.ascii	"OOOOOO\012\015\000"
+ 430      4F4F0A0D 
+ 430      00
+ 431              		.section	.data.cmdOff,"aw",%progbits
+ 432              		.align	2
+ 435              	cmdOff:
+ 436 0000 58585858 		.ascii	"XXXXXX\012\015\000"
+ 436      58580A0D 
+ 436      00
+ 437              		.section	.data.endline,"aw",%progbits
+ 438              		.align	2
+ 441              	endline:
+ 442 0000 0A0D00   		.ascii	"\012\015\000"
+ 443              		.section	.data.tData,"aw",%progbits
+ 444              		.align	2
+ 445              		.set	.LANCHOR0,. + 0
+ 448              	tData:
+ 449 0000 23303030 		.ascii	"#0001:0003#\012\015\000"
+ 449      313A3030 
+ 449      3033230A 
+ 449      0D00
+ 450              		.section	.bss.a,"aw",%nobits
+ 453              	a:
+ 454 0000 00       		.space	1
+ 455              		.section	.bss.loaded,"aw",%nobits
+ 456              		.align	2
+ 457              		.set	.LANCHOR1,. + 0
+ 460              	loaded:
+ 461 0000 00000000 		.space	4
+ 462              		.text
+ 463              	.Letext0:
+ 464              		.file 2 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 465              		.file 3 "/Users/apple/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 466              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 467              		.file 5 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 468              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h"
+ 469              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h"
+ 470              		.file 8 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 13
+
+
+ 471              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 472              		.file 10 "Drivers/CMSIS/Include/core_cm3.h"
+ 473              		.file 11 "Inc/usart.h"
+ 474              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 475              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 476              		.file 14 "Inc/gpio.h"
+ARM GAS  /var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:20     .text.SwitchOn:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:25     .text.SwitchOn:0000000000000000 SwitchOn
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:47     .text.SwitchOff:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:52     .text.SwitchOff:0000000000000000 SwitchOff
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:73     .text.PowerOn:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:78     .text.PowerOn:0000000000000000 PowerOn
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:98     .text.PowerOn:000000000000000c $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:103    .text.PowerOff:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:108    .text.PowerOff:0000000000000000 PowerOff
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:128    .text.PowerOff:000000000000000c $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:133    .text.sendData:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:138    .text.sendData:0000000000000000 sendData
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:170    .text.sendData:000000000000001c $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:175    .text.DetectorCMD:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:180    .text.DetectorCMD:0000000000000000 DetectorCMD
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:208    .text.SystemClock_Config:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:213    .text.SystemClock_Config:0000000000000000 SystemClock_Config
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:279    .text.main:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:284    .text.main:0000000000000000 main
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:393    .text.main:0000000000000094 $d
+                            *COM*:0000000000000006 rData
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:401    .text.Error_Handler:0000000000000000 $t
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:406    .text.Error_Handler:0000000000000000 Error_Handler
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:460    .bss.loaded:0000000000000000 loaded
+                            *COM*:000000000000000a a_str
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:453    .bss.a:0000000000000000 a
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:441    .data.endline:0000000000000000 endline
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:435    .data.cmdOff:0000000000000000 cmdOff
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:429    .data.cmdOn:0000000000000000 cmdOn
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:448    .data.tData:0000000000000000 tData
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:426    .data.cmdOn:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:432    .data.cmdOff:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:438    .data.endline:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:444    .data.tData:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:454    .bss.a:0000000000000000 $d
+/var/folders/br/2wtqgb695v5djmfg7vx_4m7h0000gn/T//ccljnCTX.s:456    .bss.loaded:0000000000000000 $d
+                     .debug_frame:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_UART_Transmit
+HAL_UART_GetState
+huart1
+HAL_GPIO_ReadPin
+memset
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_Init
+MX_GPIO_Init
+MX_USART1_UART_Init
+HAL_UART_Receive
+HAL_Delay
